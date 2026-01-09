@@ -26,7 +26,7 @@ def create_directed_graph(granularity: Literal["county", "prefecture", "province
     G = nx.DiGraph()
     # dual index using from and to
     for _, row in df.iterrows():
-        if row['year'] not in years and years is not None:
+        if years is not None and row['year'] not in years:
             continue
 
         if granularity == "prefecture":
@@ -44,6 +44,8 @@ def create_directed_graph(granularity: Literal["county", "prefecture", "province
             to_lon = df_geo_provinces.loc[int(to_code), "lon"]
             to_lat = df_geo_provinces.loc[int(to_code), "lat"]
         else:
+            from_code = row["from_code"]
+            to_code = row["to_code"]
             from_lon = row["from_lon"]
             from_lat = row["from_lat"]
             to_lon = row["to_lon"]
@@ -82,7 +84,7 @@ def create_undirected_graph(granularity: Literal["county", "prefecture", "provin
     G = nx.Graph()
     # dual index using from and to
     for _, row in df.iterrows():
-        if row['year'] not in years and years is not None:
+        if years is not None and row['year'] not in years:
             continue
         if granularity == "prefecture":
             from_code = str(row["from_code"])[:4]
